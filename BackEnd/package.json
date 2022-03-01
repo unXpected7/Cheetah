@@ -1,0 +1,24 @@
+{
+  "name": "Cheetah",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "start": "./node_modules/.bin/ts-node-dev src/index.ts",
+    "build": "tsc --project ./"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.21",
+    "express": "^4.17.3",
+    "moment": "^2.29.1",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.0.2",
+    "ts-node": "^10.5.0",
+    "typeorm": "^0.2.44",
+    "typescript": "^4.6.2"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.1.8"
+  }
+}
