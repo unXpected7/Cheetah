@@ -10,8 +10,11 @@
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowJs": true,
     "paths": {
-      "*": ["node_modules/*"]
+      "*": ["node_modules/*"],
+      "@App/*": ["src/*"],
+      "lib/*": ["common/*"]
     }
   },
   "include": ["src/**/*"]
