@@ -1,10 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
+import Cheetah from './Cheetah';
 
 function App() {
   return (
     <div className="App">
-     
+      <Cheetah/>
     </div>
   );
 }
