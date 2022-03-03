@@ -26,6 +26,9 @@ export class User extends BaseEntity {
   })
   nickname: string;
 
+  @Column({ nullable: true })
+  socketId: string;
+
   @Column()
   password: string;
 
