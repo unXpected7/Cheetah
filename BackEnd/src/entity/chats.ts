@@ -6,7 +6,6 @@ import {
   CreateDateColumn,
   BaseEntity,
   ManyToOne,
-  OneToOne,
   JoinColumn,
 } from "typeorm";
 import { User } from "./users";
@@ -31,7 +30,9 @@ export class Chat extends BaseEntity {
   @Column()
   userId: number;
 
-  @ManyToOne(() => User, (user) => user.chat)
+  @ManyToOne(() => User, (user) => user.chat, {
+    eager: true,
+  })
   @JoinColumn({ name: "userId" })
   user: User;
 
@@ -40,7 +41,7 @@ export class Chat extends BaseEntity {
   })
   replyId: number;
 
-  @OneToOne(() => Chat, (chat) => chat.replyId)
+  @ManyToOne(() => Chat, (chat) => chat.replyId)
   @JoinColumn({ name: "replyId" })
   reply: Chat;
 
