@@ -60,7 +60,7 @@ userRouter.post("/v1/register", async (req, res) => {
     validate(VRegister, body);
 
     const user = await User.save(
-      User.create({
+      await User.create({
         ...body,
         password: Hash(body.password, GenerateSalt()),
       })
@@ -188,7 +188,12 @@ userRouter.get("/v1/user/tag/:id", async (req, res) => {
       take: 10,
     });
 
-    return res.json(Resp.success("get tags", user.map((u) => "@"+u.nickname)));
+    return res.json(
+      Resp.success(
+        "get tags",
+        user.map((u) => "@" + u.nickname)
+      )
+    );
   } catch (error) {
     res.status(500).json(Resp.error(error.message));
   }
