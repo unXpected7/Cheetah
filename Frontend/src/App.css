@@ -1,3 +1,15 @@
+:root {
+  --primary: #9b51e0;
+  --secondary: #2f80ed;
+  --white: #ffffff;
+  --black: #000000;
+  --grey: #bdbdbd;
+  --greyBold: #777777;
+  --danger: #eb5757;
+  --warning: #f2994a;
+  --success: #27ae60;
+}
+
 .App {
   text-align: center;
 }
