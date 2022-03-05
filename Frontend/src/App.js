@@ -1,10 +1,11 @@
 import './App.css';
-import Cheetah from './Cheetah';
+// import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import SignUp from './Components/SignUp';
 
 function App() {
   return (
-    <div className="App">
-      <Cheetah/>
+    <div>
+      <SignUp/>
     </div>
   );
 }
