@@ -4,8 +4,8 @@ import {yupResolver} from '@hookform/resolvers/yup';
 
 const scheme = yup 
 .object({
-    email: yup.string().required,
-    password: yup.string().min(8).required,
+    email: yup.string().email().required(),
+    password: yup.string().min(8).required(),
     verifyPassword: yup
         .string()
         .oneOf([yup.ref('password')], 'not match')
@@ -16,7 +16,6 @@ const SignUp = () => {
     const {
         register,
         handleSubmit,
-        watch,
         formState: {errors},
     } = useForm({resolver: yupResolver(scheme),});
 
@@ -38,39 +37,30 @@ const SignUp = () => {
                         <input 
                             className="border py-1 px-2 rounded-lg" 
                             placeholder="Please enter your email"
-                            {...register('email', {
-                                required: 'Email is Required',
-                                pattern: {
-                                    value: 
-                                    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                    message: 'Please enter a valid email',
-                                }
-                            })}
+                            {...register('email')}
                             />
+                            <p className='text-rose-500'>{errors.email?.message}</p>
                     
                         <label className="font-semibold text-sm">Password</label>
                         <input 
                             className="border py-1 px-2 rounded-lg"
                             placeholder="Please enter your password"
                             type="password" 
-                            {...register('password', {
-                                required: 'Password is Required',
-                            })}
+                            {...register('password')}
                         />
+                        <p className='text-rose-500'>{errors.password?.message}</p>
 
                         <label className="font-semibold text-sm">Verify Password</label>
                         <input
                             className="border py-1 px-2 rounded-lg"
                             placeholder="Please repeat your password"
                             type="password"
-                            {...register('verifyPassword', {
-                                required: 'Verify password is Required',
-                                validate: (value) => 
-                                value === watch ('password') ? true : 'Not match',
-                            })}
+                            {...register('verifyPassword')}
                             />
-
-                        <button className="bg-black hover:shadow-xl transition duration-300 text-white py-2 rounded-xl text-sm block">
+                            <p className='text-rose-500'>{errors.verifyPassword?.message}</p>
+                        <button className="bg-black hover:shadow-xl transition duration-300 text-white py-2 rounded-xl text-sm block"
+                        onSubmit={handleSubmit()}
+                        >
                             Sign Up
                         </button>
                     </form>
