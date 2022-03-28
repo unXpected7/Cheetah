@@ -21,7 +21,9 @@ class Login extends Component {
             <Text style={styles.text}>Password</Text>
             <TextInput style={styles.input} secureTextEntry={true}></TextInput>
           </View>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.props.navigation.replace('Chatroom')}>
             <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
           <View style={styles.optionView}>
