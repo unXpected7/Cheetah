@@ -3,6 +3,7 @@ import { User } from "../../../entity/users";
 import { Router } from "express";
 import {
   CheckPassword,
+  GenerateAvatar,
   GenerateSalt,
   Hash,
   joiID,
@@ -59,10 +60,15 @@ userRouter.post("/v1/register", async (req, res) => {
     const body = req.body as IRegister;
     validate(VRegister, body);
 
+    const avatar = GenerateAvatar({
+      nickname: body.nickname,
+    });
+
     const user = await User.save(
       await User.create({
         ...body,
         password: Hash(body.password, GenerateSalt()),
+        avatar
       })
     );
     //Register Success
