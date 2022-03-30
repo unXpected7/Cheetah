@@ -21,6 +21,9 @@ export class User extends BaseEntity {
   })
   email: string;
 
+  @Column()
+  avatar: string;
+
   @Column({
     unique: true,
   })
