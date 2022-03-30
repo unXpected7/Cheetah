@@ -1,3 +1,4 @@
+import { GenerateAvatar } from "../helpers";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -21,7 +22,12 @@ export class User extends BaseEntity {
   })
   email: string;
 
-  @Column()
+  @Column({
+    default: GenerateAvatar({
+      nickname: "cheetah",
+      type: "human",
+    }),
+  })
   avatar: string;
 
   @Column({
