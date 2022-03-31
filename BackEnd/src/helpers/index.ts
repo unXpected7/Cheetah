@@ -4,6 +4,7 @@ import { joiID, joiPassword, passwordRegex, validate } from "./Validator";
 import GenerateSalt from "./GenerateSalt";
 import Hash from "./Hash";
 import CheckPassword from "./CheckPassword";
+import GenerateAvatar from "./AvatarGenerator";
 
 export {
   ColorLog,
@@ -15,4 +16,5 @@ export {
   GenerateSalt,
   Hash,
   CheckPassword,
+  GenerateAvatar
 };
