@@ -1,0 +1,262 @@
+{
+    "msg": "Get Chats Success",
+    "data": [
+        {
+            "id": 11,
+            "message": "hi juga 2",
+            "attachment": "https://c.tenor.com/g6EfGakYCeIAAAAd/tokoyami-towa-hololive.gif",
+            "userId": 5,
+            "replyId": 10,
+            "updated_at": "2022-03-03T04:39:50.000Z",
+            "created_at": "2022-03-03T04:39:50.000Z",
+            "reply": {
+                "id": 10,
+                "message": "hi juga 2",
+                "attachment": "https://i.picsum.photos/id/1065/3744/5616.jpg?hmac=V64psST3xnjnVwmIogHI8krnL3edsh_sy4HNc3dJ_xY",
+                "userId": 5,
+                "replyId": 7,
+                "updated_at": "2022-03-03T04:37:50.000Z",
+                "created_at": "2022-03-03T04:37:50.000Z",
+                "user": {
+                    "id": 5,
+                    "email": "test@test.com",
+                    "nickname": "beta_tester",
+                    "socketId": "zTHCtxKaOK4byzWsAAAB",
+                    "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                    "updated_at": "2022-03-03T04:35:43.000Z",
+                    "created_at": "2022-03-02T10:34:59.000Z",
+                    "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+                }
+            },
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 10,
+            "message": "hi juga 2",
+            "attachment": "https://i.picsum.photos/id/1065/3744/5616.jpg?hmac=V64psST3xnjnVwmIogHI8krnL3edsh_sy4HNc3dJ_xY",
+            "userId": 5,
+            "replyId": 7,
+            "updated_at": "2022-03-03T04:37:50.000Z",
+            "created_at": "2022-03-03T04:37:50.000Z",
+            "reply": {
+                "id": 7,
+                "message": "hi world",
+                "attachment": null,
+                "userId": 5,
+                "replyId": null,
+                "updated_at": "2022-03-03T03:57:38.000Z",
+                "created_at": "2022-03-03T03:57:38.000Z",
+                "user": {
+                    "id": 5,
+                    "email": "test@test.com",
+                    "nickname": "beta_tester",
+                    "socketId": "zTHCtxKaOK4byzWsAAAB",
+                    "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                    "updated_at": "2022-03-03T04:35:43.000Z",
+                    "created_at": "2022-03-02T10:34:59.000Z",
+                    "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+                }
+            },
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 9,
+            "message": "hi world",
+            "attachment": null,
+            "userId": 5,
+            "replyId": null,
+            "updated_at": "2022-03-03T04:34:19.000Z",
+            "created_at": "2022-03-03T04:34:19.000Z",
+            "reply": null,
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 8,
+            "message": "hi world",
+            "attachment": null,
+            "userId": 5,
+            "replyId": null,
+            "updated_at": "2022-03-03T04:32:18.000Z",
+            "created_at": "2022-03-03T04:32:18.000Z",
+            "reply": null,
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 7,
+            "message": "hi world",
+            "attachment": null,
+            "userId": 5,
+            "replyId": null,
+            "updated_at": "2022-03-03T03:57:38.000Z",
+            "created_at": "2022-03-03T03:57:38.000Z",
+            "reply": null,
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 6,
+            "message": "hi",
+            "attachment": null,
+            "userId": 5,
+            "replyId": null,
+            "updated_at": "2022-03-03T03:46:16.000Z",
+            "created_at": "2022-03-03T03:46:16.000Z",
+            "reply": null,
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 5,
+            "message": "hello world",
+            "attachment": null,
+            "userId": 5,
+            "replyId": null,
+            "updated_at": "2022-03-03T03:41:45.000Z",
+            "created_at": "2022-03-03T03:41:45.000Z",
+            "reply": null,
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 4,
+            "message": "hello world",
+            "attachment": null,
+            "userId": 5,
+            "replyId": null,
+            "updated_at": "2022-03-03T03:40:38.000Z",
+            "created_at": "2022-03-03T03:40:38.000Z",
+            "reply": null,
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 3,
+            "message": "hello world",
+            "attachment": null,
+            "userId": 5,
+            "replyId": null,
+            "updated_at": "2022-03-03T03:35:59.000Z",
+            "created_at": "2022-03-03T03:35:59.000Z",
+            "reply": null,
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 2,
+            "message": "hello world",
+            "attachment": "https://i.picsum.photos/id/1003/1181/1772.jpg?hmac=oN9fHMXiqe9Zq2RM6XT-RVZkojgPnECWwyEF1RvvTZk",
+            "userId": 5,
+            "replyId": null,
+            "updated_at": "2022-03-03T03:34:00.000Z",
+            "created_at": "2022-03-03T03:34:00.000Z",
+            "reply": null,
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        },
+        {
+            "id": 1,
+            "message": "hello world",
+            "attachment": null,
+            "userId": 5,
+            "replyId": null,
+            "updated_at": "2022-03-03T03:32:30.000Z",
+            "created_at": "2022-03-03T03:32:30.000Z",
+            "reply": null,
+            "user": {
+                "id": 5,
+                "email": "test@test.com",
+                "nickname": "beta_tester",
+                "socketId": "zTHCtxKaOK4byzWsAAAB",
+                "password": "5e0ba78bfba2b07b865f292b82d289e8da8d9f27c033a739748bac67fa145395::c6ac3411849edead35ee6d425675dd42cfc555a0185fe367d6d5e1aefe434b55",
+                "updated_at": "2022-03-03T04:35:43.000Z",
+                "created_at": "2022-03-02T10:34:59.000Z",
+                "avatar":"https://avatars.dicebear.com/api/human/beta_tester.png"
+            }
+        }
+    ],
+    "success": true
+}

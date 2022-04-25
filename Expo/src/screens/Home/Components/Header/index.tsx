@@ -1,8 +1,9 @@
-import { View, Text, Pressable, Modal } from "react-native";
+import { View, Pressable, Modal } from "react-native";
 import React, { useState } from "react";
 import { colors } from "../../../../utils";
 import Icon from "react-native-vector-icons/Ionicons";
 import { HStack } from "native-base";
+import { Text } from "../../../../components";
 
 const Header = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -55,8 +56,8 @@ const Header = () => {
                 py="2"
               >
                 <Text
+                  type="bold"
                   style={{
-                    fontWeight: "bold",
                     marginRight: 10,
                   }}
                 >
@@ -77,8 +78,8 @@ const Header = () => {
                 py="2"
               >
                 <Text
+                  type="bold"
                   style={{
-                    fontWeight: "bold",
                     marginRight: 10,
                   }}
                 >

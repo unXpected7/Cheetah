@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Home, Login, Register } from "../screens";
+import { Home, ImageView, Login, Register } from "../screens";
 
 const Index = () => {
   const Stack = createNativeStackNavigator();
@@ -23,6 +23,7 @@ const Index = () => {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="ImageView" component={ImageView} />
           </Stack.Group>
         )}
       </Stack.Navigator>

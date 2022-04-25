@@ -1,9 +1,9 @@
-import { Text, TextStyle, ViewStyle } from "react-native";
+import { TextStyle, ViewStyle } from "react-native";
 import React, { ReactElement } from "react";
 import { Button, Spinner } from "native-base";
 import { IButtonProps } from "native-base/lib/typescript/components/primitives/Button/types";
 import { colors } from "../../utils";
-
+import Text from "../Text";
 interface IButton {
   onPress: () => void;
   text: string;

@@ -1,22 +1,17 @@
-import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React from "react";
-import { Button, Input } from "../../components";
+import { Button, Input, Text } from "../../components";
 import { colors } from "../../utils";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Pressable } from "native-base";
-import Animated, { FadeInLeft, FadeOutLeft } from "react-native-reanimated";
+import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 const Index = () => {
   const nav: NavigationProp<any> = useNavigation();
-  const { height } = useWindowDimensions();
 
   return (
-    <Animated.View
-      entering={FadeInLeft}
-      exiting={FadeOutLeft}
-      style={styles.container}
-    >
-      <Text style={[styles.textTitle, { marginTop: height * 0.05 }]}>
+    <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.container}>
+      <Text type="bold" fontSize={"5xl"} mt="4">
         Sign Up
       </Text>
       <Input
@@ -49,21 +44,23 @@ const Index = () => {
           mt: "4",
         }}
       />
-      <Button
-        onPress={() => nav.navigate("Home")}
-        text="Sign Up!"
-        type="secondary"
-        props={{
-          mt: "6",
-          py: "3",
-        }}
-      />
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>Already have an Account ? </Text>
-        <Pressable onPress={() => nav.navigate("Login")}>
-          <Text style={styles.textBlue}>Sign in !</Text>
-        </Pressable>
-      </View>
+      <Animated.View layout={Layout}>
+        <Button
+          onPress={() => nav.navigate("Home")}
+          text="Sign Up!"
+          type="secondary"
+          props={{
+            mt: "6",
+            py: "3",
+          }}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>Already have an Account ? </Text>
+          <Pressable onPress={() => nav.navigate("Login")}>
+            <Text style={styles.textBlue}>Sign in !</Text>
+          </Pressable>
+        </View>
+      </Animated.View>
     </Animated.View>
   );
 };
@@ -75,8 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     padding: 40,
-    // justifyContent: "center",
-    // paddingTop: 20,
   },
   textContainer: {
     flexDirection: "row",
@@ -90,9 +85,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.secondary,
     fontWeight: "bold",
-  },
-  textTitle: {
-    fontWeight: "bold",
-    fontSize: 35,
   },
 });

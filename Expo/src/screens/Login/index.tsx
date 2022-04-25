@@ -1,9 +1,9 @@
-import { View, Text, useWindowDimensions, StyleSheet } from "react-native";
+import { View, useWindowDimensions, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { colors } from "../../utils";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Pressable } from "native-base";
-import { Button, Input } from "../../components";
+import { Button, Input, Text } from "../../components";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 
@@ -66,7 +66,9 @@ const Index = () => {
           <View style={styles.textContainer}>
             <Text style={styles.text}>Don't have an account ? </Text>
             <Pressable onPress={() => nav.navigate("Register")}>
-              <Text style={styles.textBlue}>Sign up !</Text>
+              <Text type="bold" style={styles.textBlue}>
+                Sign up !
+              </Text>
             </Pressable>
           </View>
         </Animated.View>
@@ -96,6 +98,5 @@ const styles = StyleSheet.create({
   textBlue: {
     fontSize: 16,
     color: colors.secondary,
-    fontWeight: "bold",
   },
 });
