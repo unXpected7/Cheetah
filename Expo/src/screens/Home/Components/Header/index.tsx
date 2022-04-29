@@ -4,11 +4,19 @@ import { colors } from "../../../../utils";
 import Icon from "react-native-vector-icons/Ionicons";
 import { HStack } from "native-base";
 import { Text } from "../../../../components";
+import { useDispatch } from "react-redux";
+import { resetAuthLogout } from "../../../../redux/Auth/Actions";
 
-const Header = () => {
+interface IHeader {
+  online: string;
+  writing: string | null;
+}
+
+const Header = ({ online, writing }: IHeader) => {
   const [modalVisible, setModalVisible] = useState(false);
   const closeModal = () => setModalVisible(false);
   const openModal = () => setModalVisible(true);
+  const dispatch = useDispatch();
   return (
     <View
       style={{
@@ -27,7 +35,7 @@ const Header = () => {
             color: colors.white,
           }}
         >
-          2 users online
+          {writing || `${online} users online`}
         </Text>
       </View>
       <Pressable onPress={openModal}>
@@ -70,7 +78,12 @@ const Header = () => {
                 />
               </HStack>
             </Pressable>
-            <Pressable onPress={closeModal}>
+            <Pressable
+              onPress={() => {
+                closeModal();
+                dispatch(resetAuthLogout());
+              }}
+            >
               <HStack
                 minW={"20"}
                 justifyContent="space-between"

@@ -6,13 +6,43 @@ import { Pressable } from "native-base";
 import { Button, Input, Text } from "../../components";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useLogin } from "../../api/Auth";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+const schema = yup
+  .object({
+    email: yup.string().email().required(),
+    password: yup
+      .string()
+      .min(6)
+      .matches(passwordRegex, "must have character and number")
+      .required(),
+  })
+  .required();
 
 const Index = () => {
   const { width } = useWindowDimensions();
+  const { _fetch, loading } = useLogin();
 
   const nav: NavigationProp<any> = useNavigation();
 
   const [isfinish, setfinished] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      nickname: "",
+      password: "",
+      repassword: "",
+    },
+    resolver: yupResolver(schema),
+  });
 
   useEffect(() => {
     setTimeout(() => {
@@ -39,23 +69,52 @@ const Index = () => {
       </Animated.View>
       {isfinish && (
         <Animated.View entering={FadeIn.delay(200)} exiting={FadeOut}>
-          <Input
-            label="Email"
-            placeholder="Enter Your email"
-            containerProps={{
-              mt: "4",
+          <Controller
+            control={control}
+            name="email"
+            rules={{
+              required: true,
             }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                errorMsg={errors.email?.message}
+                label="Email"
+                placeholder="Enter Your Email"
+                containerProps={{
+                  mt: "12",
+                }}
+              />
+            )}
           />
-          <Input
-            label="Password"
-            placeholder="Enter Your Password"
-            secureTextEntry
-            containerProps={{
-              mt: "4",
+          <Controller
+            control={control}
+            name="password"
+            rules={{
+              required: true,
             }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                errorMsg={errors.password?.message}
+                label="Password"
+                placeholder="Enter Your Password"
+                secureTextEntry
+                containerProps={{
+                  mt: "4",
+                }}
+              />
+            )}
           />
           <Button
-            onPress={() => nav.navigate("Home")}
+            isLoading={loading}
+            onPress={handleSubmit(({ email, password }) => {
+              _fetch({ email, password });
+            })}
             text="Sign In"
             type="secondary"
             props={{
