@@ -19,6 +19,7 @@
     "jest": "^27.5.1",
     "joi": "^17.6.0",
     "moment": "^2.29.1",
+    "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "socket.io": "^4.4.1",
     "sqlite3": "^5.0.2",

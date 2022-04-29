@@ -10,7 +10,7 @@ import {
   Resp,
   validate,
 } from "../../../helpers";
-import { isUnique, VLogin, VRegister } from "./Validation";
+import { isUnique, VAvailable, VLogin, VRegister } from "./Validation";
 import { Like } from "typeorm";
 
 const userRouter = Router();
@@ -54,21 +54,17 @@ interface IRegister {
   nickname: string;
   email: string;
   password: string;
+  avatar: string;
 }
 userRouter.post("/v1/register", async (req, res) => {
   try {
     const body = req.body as IRegister;
     validate(VRegister, body);
 
-    const avatar = GenerateAvatar({
-      nickname: body.nickname,
-    });
-
     const user = await User.save(
       await User.create({
         ...body,
         password: Hash(body.password, GenerateSalt()),
-        avatar
       })
     );
     //Register Success
@@ -200,6 +196,29 @@ userRouter.get("/v1/user/tag/:id", async (req, res) => {
         user.map((u) => "@" + u.nickname)
       )
     );
+  } catch (error) {
+    res.status(500).json(Resp.error(error.message));
+  }
+});
+
+interface ICheckAvailability {
+  email: string;
+  nickname: string;
+}
+/*Check if user available*/
+userRouter.post("/v1/user/check", async (req, res) => {
+  try {
+    validate(VAvailable, req.body);
+    const { email, nickname }: ICheckAvailability = req.body;
+
+    const user = await User.findOne({
+      where: [{ nickname }, { email }],
+    });
+
+    if (user != null) {
+      return res.status(422).json(Resp.error("User already exist"));
+    }
+    return res.json(Resp.success("User available"));
   } catch (error) {
     res.status(500).json(Resp.error(error.message));
   }

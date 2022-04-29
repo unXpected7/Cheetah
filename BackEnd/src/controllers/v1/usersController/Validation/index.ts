@@ -14,6 +14,7 @@ export const VRegister = joiPassword.append({
       "string.max": "nickname must be at most 30 characters",
     }),
   email: joi.string().required().email(),
+  avatar: joi.string().uri().required(),
 });
 
 export const VLogin = joiPassword.append({
@@ -26,9 +27,24 @@ export const isUnique = (msg: string) => {
   if (msg.toLowerCase().includes("unique")) {
     uniqueContstraint.forEach((constraint) => {
       if (msg.includes(constraint)) {
-       msg = `${constraint} is already taken`;
+        msg = `${constraint} is already taken`;
       }
-    })
+    });
   }
   return msg;
 };
+
+export const VAvailable = joi.object({
+  nickname: joi
+    .string()
+    .required()
+    .min(3)
+    .max(30)
+    .regex(/^[a-zA-Z0-9.\-_$*!]{3,30}$/)
+    .messages({
+      "string.pattern.base": "invalid nickname",
+      "string.min": "nickname must be at least 3 characters",
+      "string.max": "nickname must be at most 30 characters",
+    }),
+  email: joi.string().required().email(),
+});
