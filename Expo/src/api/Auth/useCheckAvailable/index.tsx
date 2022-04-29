@@ -1,15 +1,11 @@
 import Handler from "../../index";
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useToast } from "native-base";
 import { Toaster } from "../../../helpers";
-import { setAuthLogin } from "../../../redux/Auth/Actions";
 
 interface IPayload {
   email: string;
-  password: string;
   nickname: string;
-  avatar: string;
 }
 
 const useLogin = () => {
@@ -17,24 +13,14 @@ const useLogin = () => {
   const [Error, setError] = React.useState(false);
   const [Data, setData] = React.useState<Data>();
   const [Msg, setMsg] = React.useState<string>("");
-  const dispatch = useDispatch();
   const toast = useToast();
-  const Login = (data: Data) => {
-    dispatch(
-      setAuthLogin({
-        isLogin: true,
-        ...data,
-      })
-    );
-  };
-  //   const toast = useToast();
 
   const _fetch = async (payload: IPayload) => {
     setLoading(true);
     setError(false);
     setData(undefined);
     const res = await Handler({
-      path: "register",
+      path: "user/check",
       isNotLogin: true,
       data: payload,
       type: "POST",
@@ -45,7 +31,6 @@ const useLogin = () => {
     if (success) {
       setError(false);
       setMsg(msg);
-      Login({ ...data });
     } else {
       setError(true);
       setMsg(msg);

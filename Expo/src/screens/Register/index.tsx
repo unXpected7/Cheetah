@@ -5,7 +5,7 @@ import { colors } from "../../utils";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Pressable } from "native-base";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
-import { useRegister } from "../../api/Auth";
+import { useCheckAvailable, useRegister } from "../../api/Auth";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -40,6 +40,9 @@ const Index = () => {
     },
     resolver: yupResolver(schema),
   });
+
+  const { loading, _fetch } = useCheckAvailable();
+
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <Animated.View
@@ -134,8 +137,13 @@ const Index = () => {
         />
         <Animated.View layout={Layout}>
           <Button
-            onPress={handleSubmit((data) => {
-              nav.navigate("GenerateAvatar", data);
+            isLoading={loading}
+            onPress={handleSubmit(async (data) => {
+              const { success } = await _fetch({
+                email: data.email,
+                nickname: data.nickname,
+              });
+              success && nav.navigate("GenerateAvatar", data);
             })}
             text="Sign Up!"
             type="secondary"

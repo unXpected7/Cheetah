@@ -1,4 +1,5 @@
 import useLogin from "./useLogin";
 import useRegister from "./useRegister";
+import useCheckAvailable from "./useCheckAvailable";
 
-export { useLogin, useRegister };
+export { useLogin, useRegister, useCheckAvailable };

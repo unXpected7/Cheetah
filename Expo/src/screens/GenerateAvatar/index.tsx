@@ -156,6 +156,7 @@ const Index = () => {
                   email,
                   nickname,
                   password,
+                  avatar: source ?? generateRandomAvatar("adventurer"),
                 });
               }}
               type="secondary"
