@@ -1,32 +1,35 @@
 // @generated automatically by Diesel CLI.
-diesel::table! {
-    users (id) {
-        id -> Int8,
-        title -> Varchar,
-        body -> Text,
-        published -> Bool,
-        email -> Text,
-        avatar -> Text,
-        nickname -> Text,
-        socketId -> Text,
-        authId -> Text,
-        updatedAt -> Text,
-        createdAt -> Text,
-    }
-}
 
 diesel::table! {
     chats (id) {
         id -> Int8,
-        message -> Text,
-        attachment -> Text,
-        userId -> Int8,
-        replyId -> Int8,
-        updatedAt -> Text,
-        createdAt -> Text,
+        message -> Nullable<Text>,
+        attachment -> Nullable<Text>,
+        userId -> Nullable<Int8>,
+        replyId -> Nullable<Int8>,
+        updated_at -> Nullable<Timestamptz>,
+        created_at -> Nullable<Timestamptz>,
+    }
+}
+
+diesel::table! {
+    users (id) {
+        id -> Int8,
+        email -> Nullable<Text>,
+        avatar -> Nullable<Text>,
+        nickname -> Nullable<Text>,
+        socketId -> Nullable<Text>,
+        password -> Nullable<Text>,
+        chatId -> Nullable<Int8>,
+        authId -> Nullable<Uuid>,
+        updated_at -> Nullable<Timestamptz>,
+        created_at -> Nullable<Timestamptz>,
     }
 }
 
 diesel::joinable!(chats -> users (userId));
 
-diesel::allow_tables_to_appear_in_same_query!(users, chats);
+diesel::allow_tables_to_appear_in_same_query!(
+    chats,
+    users,
+);

@@ -1,21 +1,23 @@
+use chrono::{DateTime, Utc};
 use diesel::prelude::*;
+use uuid::Uuid;
 
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = crate::db::schema::users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct User {
     pub id: i64,
-    pub email: String,
-    pub avatar: String,
-    pub nickname: String,
+    pub email: Option<String>,
+    pub avatar: Option<String>,
+    pub nickname: Option<String>,
     #[diesel(column_name = "socketId")]
-    pub socketId: String,
+    pub socketId: Option<String>,
     #[diesel(column_name = "authId")]
-    pub authId: String,
-    #[diesel(column_name = "updatedAt")]
-    pub updatedAt: String,
-    #[diesel(column_name = "createdAt")]
-    pub createdAt: String,
+    pub authId: Option<Uuid>,
+    #[diesel(column_name = "updated_at")]
+    pub updated_at: Option<DateTime<Utc>>, // Changed to match Timestamptz
+    #[diesel(column_name = "created_at")]
+    pub created_at: Option<DateTime<Utc>>,
 }
 
 #[derive(Identifiable, Selectable, Queryable, Associations, Debug, Clone)]
@@ -25,14 +27,14 @@ pub struct User {
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Chat {
     pub id: i64,
-    pub message: String,
-    pub attachment: String,
+    pub message: Option<String>,
+    pub attachment: Option<String>,
+    #[diesel(column_name = "updated_at")]
+    pub updated_at: Option<DateTime<Utc>>, // Changed to match Timestamptz
+    #[diesel(column_name = "created_at")]
+    pub created_at: Option<DateTime<Utc>>, // Changed to match Timestamptz
     #[diesel(column_name = "userId")]
-    pub userId: i64,
+    pub userId: Option<i64>,
     #[diesel(column_name = "replyId")]
-    pub replyId: i64,
-    #[diesel(column_name = "updatedAt")]
-    pub updatedAt: String,
-    #[diesel(column_name = "createdAt")]
-    pub createdAt: String,
+    pub replyId: Option<i64>,
 }
