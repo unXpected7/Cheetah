@@ -15,3 +15,6 @@ tokio-stream = "0.1.17"
 tokio-util = { version = "0.7", features = ["io"], default-features = false }
 tower-http = { version = "0.5.0", features = ["cors"] }
 tower = "0.5.2"
+dotenvy = "0.15"
+diesel = { version = "2.2.0", features = ["postgres"] }
+chrono = "0.4.41"
