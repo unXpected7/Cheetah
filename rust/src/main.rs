@@ -27,7 +27,7 @@ fn on_connect(socket: SocketRef, Data(data): Data<Value>) {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    db::establish_connection();
+    db::get_user();
     tracing::subscriber::set_global_default(FmtSubscriber::default())?;
 
     let (layer, io) = SocketIo::new_layer();

@@ -5,6 +5,7 @@ use uuid::Uuid;
 #[derive(Queryable, Selectable)]
 #[diesel(table_name = crate::db::schema::users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
+#[derive(Debug)]
 pub struct User {
     pub id: i64,
     pub email: Option<String>,
