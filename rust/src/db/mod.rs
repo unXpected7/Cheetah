@@ -13,14 +13,3 @@ pub fn establish_connection() -> PgConnection {
     PgConnection::establish(&database_url)
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
-
-pub fn get_user() {
-    let connection = &mut establish_connection();
-    match users::table
-        .select(User::as_select())
-        .first::<User>(connection)
-    {
-        Ok(user) => println!("Found user: {:?}", user), // Adjust field names as per your User struct
-        Err(e) => println!("Error loading user: {}", e),
-    }
-}

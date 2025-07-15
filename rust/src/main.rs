@@ -8,6 +8,7 @@ use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
 use tracing::info;
 use tracing_subscriber::FmtSubscriber;
+mod controllers;
 mod db;
 
 fn on_connect(socket: SocketRef, Data(data): Data<Value>) {
@@ -27,7 +28,10 @@ fn on_connect(socket: SocketRef, Data(data): Data<Value>) {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    db::get_user();
+    let user = controllers::user_controller::get_user::get_user_by_auth_id(1);
+
+    println!("User: {:?}", user);
+
     tracing::subscriber::set_global_default(FmtSubscriber::default())?;
 
     let (layer, io) = SocketIo::new_layer();
