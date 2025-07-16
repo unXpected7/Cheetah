@@ -8,8 +8,10 @@ use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
 use tracing::info;
 use tracing_subscriber::FmtSubscriber;
+
 mod controllers;
 mod db;
+mod lib;
 
 fn on_connect(socket: SocketRef, Data(data): Data<Value>) {
     info!("Socket.IO connected: {:?} {:?}", socket.ns(), socket.id);
@@ -31,6 +33,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let user = controllers::user_controller::get_user::get_user_by_auth_id(1);
 
     println!("User: {:?}", user);
+    controllers::user_controller::register::register_user(
+        controllers::user_controller::register::UserRegistration {
+            nickname: "test_user".to_string(),
+            email: "ilyastest@test.com".to_string(),
+            password: "password".to_string(),
+        },
+    );
 
     tracing::subscriber::set_global_default(FmtSubscriber::default())?;
 
