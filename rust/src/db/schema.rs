@@ -1,5 +1,7 @@
 // @generated automatically by Diesel CLI.
 
+use diesel::dsl::Nullable;
+
 diesel::table! {
     chats (id) {
         id -> Int8,
@@ -20,6 +22,7 @@ diesel::table! {
         nickname -> Nullable<Text>,
         socketId -> Nullable<Text>,
         password -> Nullable<Text>,
+        refresh_token -> Nullable<Text>,
         chatId -> Nullable<Int8>,
         authId -> Nullable<Uuid>,
         updated_at -> Nullable<Timestamptz>,

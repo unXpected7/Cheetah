@@ -1,32 +1,53 @@
-use diesel::prelude::Insertable;
-use diesel::query_dsl::methods::{FindDsl, SelectDsl};
-use diesel::{RunQueryDsl, SelectableHelper};
-
-use crate::db::establish_connection;
 use crate::db::model::User;
 use crate::db::schema::users;
-use crate::lib::Resp;
-
+use crate::libs::Resp;
+use crate::libs::avatar::AvatarType;
+use crate::{db::establish_connection, libs::avatar::generate_avatar};
+use argon2::{
+    Argon2,
+    password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
+};
+use axum::extract::Json;
+use axum::http::StatusCode;
+use axum::response::IntoResponse;
+use diesel::prelude::Insertable;
+use diesel::{RunQueryDsl, SelectableHelper};
+use serde::Deserialize;
+#[derive(Deserialize)]
 pub struct UserRegistration {
     pub nickname: String,
     pub email: String,
     pub password: String,
+    pub avatar: Option<String>,
 }
 
 #[derive(Insertable, Debug)]
 #[diesel(table_name = users)]
 struct NewUser<'a> {
-    pub email: Option<&'a str>,
-    pub nickname: Option<&'a str>,
-    pub password: Option<&'a str>,
+    pub email: &'a str,
+    pub nickname: &'a str,
+    pub password: &'a str,
+    pub avatar: &'a str,
 }
 
-pub fn register_user(params: UserRegistration) -> Resp<User> {
+pub async fn register_user(Json(params): Json<UserRegistration>) -> impl IntoResponse {
     let connection = &mut establish_connection();
+    let password = params.password.as_bytes();
+    let salt = SaltString::generate(&mut OsRng);
+    let argon2 = Argon2::default();
+    let avatar = params.avatar.unwrap_or(generate_avatar(
+        params.nickname.clone(),
+        AvatarType::Identicon,
+    ));
+    let password_hash = argon2
+        .hash_password(password, &salt)
+        .expect("Failed to hash password")
+        .to_string();
     let new_user = NewUser {
-        email: Some(&params.email),
-        nickname: Some(&params.nickname),
-        password: Some(&params.password),
+        email: &params.email,
+        nickname: &params.nickname,
+        password: &password_hash,
+        avatar: &avatar,
     };
     let results = diesel::insert_into(users::table)
         .values(&new_user)
@@ -36,7 +57,10 @@ pub fn register_user(params: UserRegistration) -> Resp<User> {
         Ok(user) => Resp::success("User registered successfully", Some(user)),
         Err(e) => {
             eprintln!("Error registering user: {}", e);
-            Resp::error(e.to_string())
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Resp::error(e.to_string()),
+            )
         }
     }
 }

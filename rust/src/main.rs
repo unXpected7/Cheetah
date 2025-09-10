@@ -11,7 +11,8 @@ use tracing_subscriber::FmtSubscriber;
 
 mod controllers;
 mod db;
-mod lib;
+mod libs;
+mod router;
 
 fn on_connect(socket: SocketRef, Data(data): Data<Value>) {
     info!("Socket.IO connected: {:?} {:?}", socket.ns(), socket.id);
@@ -28,18 +29,11 @@ fn on_connect(socket: SocketRef, Data(data): Data<Value>) {
     });
 }
 
-#[tokio::main]
+#[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let user = controllers::user_controller::get_user::get_user_by_auth_id(1);
 
     println!("User: {:?}", user);
-    controllers::user_controller::register::register_user(
-        controllers::user_controller::register::UserRegistration {
-            nickname: "test_user".to_string(),
-            email: "ilyastest@test.com".to_string(),
-            password: "password".to_string(),
-        },
-    );
 
     tracing::subscriber::set_global_default(FmtSubscriber::default())?;
 
@@ -53,11 +47,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let app = axum::Router::new()
         .route("/", get(|| async { "Hello, World!" }))
+        .merge(router::main())
         .layer(layer);
 
     info!("Starting server");
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3333").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 
     Ok(())
