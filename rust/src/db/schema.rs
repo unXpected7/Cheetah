@@ -11,6 +11,8 @@ diesel::table! {
         replyId -> Nullable<Int8>,
         updated_at -> Nullable<Timestamptz>,
         created_at -> Nullable<Timestamptz>,
+        user->Nullable<Text>
+
     }
 }
 

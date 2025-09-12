@@ -1,12 +1,7 @@
 use chrono::{DateTime, Utc};
-use diesel::prelude::*;
 use serde::Serialize;
-use uuid::Uuid;
-
-#[derive(Queryable, Selectable, Serialize)]
-#[diesel(table_name = crate::db::schema::users)]
-#[diesel(check_for_backend(diesel::pg::Pg))]
-#[derive(Debug)]
+use serde_json::Value;
+#[derive(Serialize, sqlx::FromRow)]
 pub struct User {
     pub id: i64,
     pub email: Option<String>,
@@ -14,31 +9,29 @@ pub struct User {
     pub nickname: Option<String>,
     pub password: Option<String>,
     pub refresh_token: Option<String>,
-    #[diesel(column_name = "socketId")]
-    pub socketId: Option<String>,
-    #[diesel(column_name = "authId")]
-    pub authId: Option<Uuid>,
-    #[diesel(column_name = "updated_at")]
+    #[serde(rename = "socketId")]
+    #[sqlx(rename = "socketId")]
+    pub socket_id: Option<String>,
+    #[serde(rename = "authId")]
+    #[sqlx(rename = "authId")]
+    pub auth_id: Option<String>,
     pub updated_at: Option<DateTime<Utc>>, // Changed to match Timestamptz
-    #[diesel(column_name = "created_at")]
     pub created_at: Option<DateTime<Utc>>,
 }
 
-#[derive(Identifiable, Selectable, Queryable, Associations, Debug, Clone)]
-#[diesel(table_name = crate::db::schema::chats)]
-#[diesel(belongs_to(User, foreign_key = userId))]
-#[diesel(belongs_to(Chat, foreign_key = replyId))]
-#[diesel(check_for_backend(diesel::pg::Pg))]
+#[derive(Serialize, sqlx::FromRow)]
 pub struct Chat {
     pub id: i64,
     pub message: Option<String>,
     pub attachment: Option<String>,
-    #[diesel(column_name = "updated_at")]
     pub updated_at: Option<DateTime<Utc>>, // Changed to match Timestamptz
-    #[diesel(column_name = "created_at")]
     pub created_at: Option<DateTime<Utc>>, // Changed to match Timestamptz
-    #[diesel(column_name = "userId")]
-    pub userId: Option<i64>,
-    #[diesel(column_name = "replyId")]
-    pub replyId: Option<i64>,
+    #[serde(rename = "userId")]
+    #[sqlx(rename = "userId")]
+    pub user_id: Option<i64>,
+    #[serde(rename = "replyId")]
+    #[sqlx(rename = "replyId")]
+    pub reply_id: Option<i64>,
+    pub user: Option<Value>,
+    pub reply: Option<Value>,
 }
