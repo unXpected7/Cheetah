@@ -1,6 +1,5 @@
 use axum::{Json, http::StatusCode, response::IntoResponse};
 use serde::Deserialize;
-use tokio::sync::mpsc::error;
 
 use crate::{controllers::user_controller::get_user::get_user_by_email, libs::Resp};
 

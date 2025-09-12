@@ -41,7 +41,7 @@ pub async fn register_user(Json(params): Json<UserRegistration>) -> impl IntoRes
             .bind(avatar)
             .execute(&connection)
             .await;
-    connection.close();
+    connection.close().await;
     match results {
         Ok(row) => Resp::success("User registered successfully", None::<()>),
         Err(e) => {
