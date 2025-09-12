@@ -12,6 +12,7 @@ use tracing_subscriber::FmtSubscriber;
 mod controllers;
 mod db;
 mod libs;
+mod middleware;
 mod router;
 
 fn on_connect(socket: SocketRef, Data(data): Data<Value>) {

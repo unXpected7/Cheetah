@@ -71,33 +71,77 @@ fn jwt(id: i64, duration: TimeDelta) -> Result<String, Box<dyn std::error::Error
     Ok(format!("{}.{}", message, signature))
 }
 
-fn verify_jwt(token: &str, secret: &str) -> Result<JwtBody, Box<dyn std::error::Error>> {
+pub struct VerifyJwt {
+    pub result: bool,
+    pub reason: String,
+}
+
+pub fn verify_jwt(token: &str) -> VerifyJwt {
+    let secret = env::var("SECRET").expect("env secret not found");
+
     let parts: Vec<&str> = token.split('.').collect();
     if parts.len() != 3 {
-        return Err("Invalid token format".into());
+        return VerifyJwt {
+            result: false,
+            reason: "Invalid Token format".to_string(),
+        };
     }
 
     let (header_b64, payload_b64, signature_b64) = (parts[0], parts[1], parts[2]);
 
     // Verify signature
     let message = format!("{}.{}", header_b64, payload_b64);
-    let expected_signature = create_hmac_signature(&message, secret)?;
+    let expected_signature = match create_hmac_signature(&message, &secret) {
+        Ok(sign) => sign,
+        Err(err) => {
+            return VerifyJwt {
+                result: false,
+                reason: err.to_string(),
+            };
+        }
+    };
 
     if signature_b64 != expected_signature {
-        return Err("Invalid signature".into());
+        return VerifyJwt {
+            result: false,
+            reason: "Invalid Signature".to_string(),
+        };
     }
 
     // Decode and verify payload
-    let payload_json = b64::URL_SAFE_NO_PAD.decode(payload_b64)?;
-    let payload: JwtBody = serde_json::from_slice(&payload_json)?;
+    let payload_json = match b64::URL_SAFE_NO_PAD.decode(payload_b64) {
+        Ok(vector) => vector,
+        Err(err) => {
+            return VerifyJwt {
+                result: false,
+                reason: err.to_string(),
+            };
+        }
+    };
+
+    let payload: JwtBody = match serde_json::from_slice(&payload_json) {
+        Ok(json_body) => json_body,
+        Err(err) => {
+            return VerifyJwt {
+                result: false,
+                reason: err.to_string(),
+            };
+        }
+    };
 
     // Check expiration
     let now = Utc::now().timestamp();
     if payload.exp < now {
-        return Err("Token expired".into());
+        return VerifyJwt {
+            result: false,
+            reason: "Token Expired".to_string(),
+        };
+    } else {
+        return VerifyJwt {
+            result: true,
+            reason: "Ok".to_string(),
+        };
     }
-
-    Ok(payload)
 }
 
 pub struct GenerateJWt {
