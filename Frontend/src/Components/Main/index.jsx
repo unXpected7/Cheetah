@@ -3,10 +3,10 @@ import Bottom from "./BottomBar";
 import Chat from "./ChatGroup";
 import Top from "./TopBar";
 
-const Main = () => {
+const Main = ({ onLogout }) => {
     return(
-        <div>
-            <Top/>
+        <div className="h-screen flex flex-col">
+            <Top onLogout={onLogout}/>
             <Chat/>
             <Bottom/>
         </div>
