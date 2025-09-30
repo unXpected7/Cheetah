@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { mockAPI } from "../../../services/mockAPI";
 import './style.scss';
 
-const Chat = ({ userId, contactId }) => {
+const Chat = ({ userId, contactId, chatInfo }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -134,6 +134,21 @@ const Chat = ({ userId, contactId }) => {
 
     return (
         <div className="chat">
+            {/* Chat Header */}
+            <div className="chat-header">
+                <div className="chat-header-avatar">
+                    <span>{chatInfo?.avatar || '👤'}</span>
+                </div>
+                <div className="chat-header-info">
+                    <h3 className="chat-header-name">{chatInfo?.name || 'Chat'}</h3>
+                    <p className="chat-header-status">
+                        {chatInfo?.type === 'personal' && chatInfo?.isOnline ? 'online' :
+                         chatInfo?.type === 'group' ? `${chatInfo?.members || 0} members` :
+                         'offline'}
+                    </p>
+                </div>
+            </div>
+
             <div className="messages">
                 {dateKeys.map(dateKey => (
                     <div key={dateKey} className="date-separator">

@@ -1,43 +1,176 @@
-# Getting Started with Create React App
+# WhatsApp Clone - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern WhatsApp-inspired chat application built with React, TypeScript, Tailwind CSS, and shadcn/ui components. This application provides a responsive chat interface with features like real-time messaging, chat lists, and responsive design for both desktop and mobile devices.
+
+## Features
+
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Chat Management**: Personal chats, group chats, and channels support
+- **Real-time Messaging**: Send and receive messages with typing indicators
+- **Search Functionality**: Search through chats and messages
+- **Tab Navigation**: Separate tabs for Chats, Calls, and Status
+- **Dark/Light Theme**: Built with Tailwind CSS for styling
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Unit Testing**: Comprehensive test suite with Jest and React Testing Library
+
+## Tech Stack
+
+- **React 17**: Core UI framework
+- **TypeScript**: Static type checking
+- **Tailwind CSS**: Utility-first CSS framework
+- **shadcn/ui**: Modern component library
+- **Jest**: Unit testing framework
+- **React Testing Library**: Testing utilities
+- **ESLint**: Code linting
+- **Prettier**: Code formatting
+
+## Project Structure
+
+```
+src/
+├── Components/
+│   ├── Main/
+│   │   ├── WhatsAppInterface.tsx    # Main application container
+│   │   ├── ChatList/
+│   │   │   └── ChatList.tsx          # Chat list with search and tabs
+│   │   └── ChatGroup/
+│   │       └── Chat.tsx              # Individual chat interface
+│   └── ui/                          # shadcn/ui components
+├── types/
+│   └── chat.ts                      # TypeScript type definitions
+├── __tests__/
+│   ├── components/                   # Component tests
+│   ├── mocks/                       # Test data and mocks
+│   └── setup.ts                     # Test configuration
+├── App.tsx                          # Main application component
+├── index.tsx                       # Entry point
+└── App.css                          # Global styles
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 14.0 or higher
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd Frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+### Development
+
+Start the development server:
+```bash
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the application in your browser.
+
+The page will reload automatically when you make changes.
+
+## Testing
+
+Run the test suite:
+```bash
+npm test
+```
+
+The tests use Jest with React Testing Library and include:
+- Component rendering tests
+- User interaction tests
+- Error handling tests
+- Accessibility tests
+- Performance tests
+
+To run tests with coverage:
+```bash
+npm run test:coverage
+```
+
+## Building for Production
+
+Create a production build:
+```bash
+npm run build
+```
+
+The build output will be in the `build/` directory and is ready for deployment.
 
 ## Available Scripts
 
-In the project directory, you can run:
+- `npm start` - Start development server
+- `npm test` - Run test suite in watch mode
+- `npm run build` - Build for production
+- `npm run eject` - Eject from Create React App (not recommended)
+- `npm run lint` - Run ESLint
+- `npm run format` - Run Prettier formatter
 
-### `npm start`
+## Key Components
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### WhatsAppInterface.tsx
+Main container component that handles:
+- Responsive layout (desktop/mobile)
+- Chat selection and view management
+- Navigation between different views
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### ChatList.tsx
+Chat list component featuring:
+- Search functionality
+- Tab navigation (Chats, Calls, Status)
+- Chat item rendering with avatars and unread counts
+- Empty states for filtered results
 
-### `npm test`
+### Chat.tsx
+Individual chat interface with:
+- Message display with timestamps
+- Message input with send functionality
+- Typing indicators
+- Error handling and retry mechanisms
+- Auto-scroll to latest messages
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Type Definitions
 
-### `npm run build`
+The application uses TypeScript with comprehensive type definitions in `src/types/chat.ts`:
+- `ChatInfo`: Chat metadata and properties
+- `ChatMessage`: Individual message structure
+- `ChatType`: Enum for chat types (personal, group, channel)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Mock Services
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+For development and testing, the application includes mock API services:
+- Mock chat data
+- Simulated API responses
+- Error scenarios testing
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Styling
 
-### `npm run eject`
+The application uses Tailwind CSS with a custom color scheme based on WhatsApp's design:
+- Green accent color (#128C7E)
+- Clean, modern interface
+- Responsive utilities for mobile-first design
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Contributing
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Run the test suite
+6. Submit a pull request
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## License
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+This project is licensed under the MIT License.
 
 ## Learn More
 
