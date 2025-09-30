@@ -1,8 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders welcome message', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const welcomeElement = screen.getByText(/Welcome Back/i);
+  expect(welcomeElement).toBeInTheDocument();
+});
+
+test('renders sign in form', () => {
+  render(<App />);
+  const emailLabel = screen.getByText(/Email address/i);
+  const passwordField = screen.getByLabelText(/Password/i);
+  expect(emailLabel).toBeInTheDocument();
+  expect(passwordField).toBeInTheDocument();
 });

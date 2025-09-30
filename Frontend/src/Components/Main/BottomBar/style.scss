@@ -1,8 +1,25 @@
 .bottom {
-    position: fixed;
-    width: max-content;
-    height: 20px;
-    background-color: 2f80e;
-    margin-bottom: 0px;
+    position: sticky;
     bottom: 0;
+    z-index: 100;
+    width: 100%;
+    padding: 0;
+
+    @media (max-width: 768px) {
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    textarea {
+        @media (max-width: 480px) {
+            font-size: 14px;
+            padding: 0.75rem 1rem;
+        }
+    }
+
+    button {
+        @media (max-width: 480px) {
+            padding: 0.5rem;
+        }
+    }
 }
