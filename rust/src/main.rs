@@ -17,6 +17,7 @@ use std::sync::Arc;
 use tokio::sync::RwLock;
 
 mod controllers;
+mod compose;
 mod db;
 mod extract;
 mod libs;
