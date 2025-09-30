@@ -11,17 +11,62 @@ use tracing::info;
 use tracing_subscriber::FmtSubscriber;
 
 use crate::db::conn::create_connection;
+use crate::socket::handlers;
+use std::collections::HashMap;
+use std::sync::Arc;
+use tokio::sync::RwLock;
 
 mod controllers;
 mod db;
+mod extract;
 mod libs;
 mod middleware;
 mod router;
+mod socket;
 
-fn on_connect(socket: SocketRef, Data(data): Data<Value>) {
+fn on_connect(
+    socket: SocketRef,
+    Data(data): Data<Value>,
+    app_state: AppState,
+    user_sockets: UserSocketMap,
+) {
     info!("Socket.IO connected: {:?} {:?}", socket.ns(), socket.id);
     socket.emit("auth", &data).ok();
 
+    // Handle join event
+    socket.on("join", move |socket: SocketRef, Data::<Value>(data)| {
+        let app_state = app_state.clone();
+        let user_sockets = user_sockets.clone();
+        handlers::handle_join(socket, SocketIo::new(), data, user_sockets);
+    });
+
+    // Handle left event
+    socket.on("left", move |socket: SocketRef, Data::<Value>(data)| {
+        let app_state = app_state.clone();
+        let user_sockets = user_sockets.clone();
+        handlers::handle_left(socket, SocketIo::new(), data, user_sockets);
+    });
+
+    // Handle chat event
+    socket.on("chat", move |socket: SocketRef, Data::<Value>(data)| {
+        let app_state = app_state.clone();
+        let user_sockets = user_sockets.clone();
+        handlers::handle_chat(socket, SocketIo::new(), data, app_state.db, user_sockets);
+    });
+
+    // Handle writing event
+    socket.on("writing", move |socket: SocketRef, Data::<Value>(data)| {
+        let app_state = app_state.clone();
+        handlers::handle_writing(socket, SocketIo::new(), data);
+    });
+
+    // Handle cancelWriting event
+    socket.on("cancelWriting", move |socket: SocketRef, Data::<Value>(data)| {
+        let app_state = app_state.clone();
+        handlers::handle_cancel_writing(socket, SocketIo::new(), data);
+    });
+
+    // Keep ping for testing
     socket.on("ping", |socket: SocketRef, Data::<Value>(data)| {
         info!("Received event: {:?}", data);
         socket.emit("ping", &data).ok();
@@ -38,6 +83,8 @@ struct AppState {
     db: Pool<Postgres>,
 }
 
+type UserSocketMap = Arc<RwLock<HashMap<String, SocketRef>>>;
+
 #[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing::subscriber::set_global_default(FmtSubscriber::default())?;
@@ -45,6 +92,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pool = create_connection().await;
 
     let state = AppState { db: pool };
+    let user_sockets: UserSocketMap = Arc::new(RwLock::new(HashMap::new()));
 
     let (layer, io) = SocketIo::new_layer();
 
@@ -52,7 +100,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .layer(CorsLayer::permissive()) // Enable CORS policy
         .layer(layer);
 
-    io.ns("/", on_connect);
+    // Create a closure that captures the state and user_sockets
+    let on_connect_handler = move |socket: SocketRef, Data(data): Data<Value>| {
+        let state = state.clone();
+        let user_sockets = user_sockets.clone();
+        on_connect(socket, data, state, user_sockets);
+    };
+
+    io.ns("/", on_connect_handler);
 
     let app = axum::Router::new()
         .route("/", get(|| async { "Hello, World!" }))

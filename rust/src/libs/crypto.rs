@@ -74,6 +74,13 @@ fn jwt(id: i64, duration: TimeDelta) -> Result<String, Box<dyn std::error::Error
 pub struct VerifyJwt {
     pub result: bool,
     pub reason: String,
+    pub user_id: Option<i64>,
+}
+
+impl VerifyJwt {
+    pub fn extract_user_id(&self) -> i64 {
+        self.user_id.unwrap_or(0)
+    }
 }
 
 pub fn verify_jwt(token: &str) -> VerifyJwt {
@@ -84,6 +91,7 @@ pub fn verify_jwt(token: &str) -> VerifyJwt {
         return VerifyJwt {
             result: false,
             reason: "Invalid Token format".to_string(),
+            user_id: None,
         };
     }
 
@@ -97,6 +105,7 @@ pub fn verify_jwt(token: &str) -> VerifyJwt {
             return VerifyJwt {
                 result: false,
                 reason: err.to_string(),
+                user_id: None,
             };
         }
     };
@@ -105,6 +114,7 @@ pub fn verify_jwt(token: &str) -> VerifyJwt {
         return VerifyJwt {
             result: false,
             reason: "Invalid Signature".to_string(),
+            user_id: None,
         };
     }
 
@@ -115,6 +125,7 @@ pub fn verify_jwt(token: &str) -> VerifyJwt {
             return VerifyJwt {
                 result: false,
                 reason: err.to_string(),
+                user_id: None,
             };
         }
     };
@@ -125,6 +136,7 @@ pub fn verify_jwt(token: &str) -> VerifyJwt {
             return VerifyJwt {
                 result: false,
                 reason: err.to_string(),
+                user_id: None,
             };
         }
     };
@@ -135,11 +147,13 @@ pub fn verify_jwt(token: &str) -> VerifyJwt {
         return VerifyJwt {
             result: false,
             reason: "Token Expired".to_string(),
+            user_id: None,
         };
     } else {
         return VerifyJwt {
             result: true,
             reason: "Ok".to_string(),
+            user_id: Some(payload.id),
         };
     }
 }
