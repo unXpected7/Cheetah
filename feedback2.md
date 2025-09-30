@@ -1,0 +1,1 @@
+separate handlers in handlers.js as one file one function for more easier versioning like did in Oldbackend typescript
