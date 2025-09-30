@@ -1,7 +1,10 @@
 [package]
 name = "rust"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+
+[dev-dependencies]
+tokio-test = "0.4"
 
 [dependencies]
 axum = "0.8.4"
