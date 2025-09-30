@@ -11,7 +11,7 @@ use tracing::info;
 use tracing_subscriber::FmtSubscriber;
 
 use crate::db::conn::create_connection;
-use crate::socket::handlers;
+use crate::socket::handlers::{handle_join, handle_left, handle_chat, handle_writing, handle_cancel_writing};
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -37,33 +37,33 @@ fn on_connect(
     socket.on("join", move |socket: SocketRef, Data::<Value>(data)| {
         let app_state = app_state.clone();
         let user_sockets = user_sockets.clone();
-        handlers::handle_join(socket, SocketIo::new(), data, user_sockets);
+        handle_join(socket, SocketIo::new(), data, user_sockets);
     });
 
     // Handle left event
     socket.on("left", move |socket: SocketRef, Data::<Value>(data)| {
         let app_state = app_state.clone();
         let user_sockets = user_sockets.clone();
-        handlers::handle_left(socket, SocketIo::new(), data, user_sockets);
+        handle_left(socket, SocketIo::new(), data, user_sockets);
     });
 
     // Handle chat event
     socket.on("chat", move |socket: SocketRef, Data::<Value>(data)| {
         let app_state = app_state.clone();
         let user_sockets = user_sockets.clone();
-        handlers::handle_chat(socket, SocketIo::new(), data, app_state.db, user_sockets);
+        handle_chat(socket, SocketIo::new(), data, app_state.db, user_sockets);
     });
 
     // Handle writing event
     socket.on("writing", move |socket: SocketRef, Data::<Value>(data)| {
         let app_state = app_state.clone();
-        handlers::handle_writing(socket, SocketIo::new(), data);
+        handle_writing(socket, SocketIo::new(), data);
     });
 
     // Handle cancelWriting event
     socket.on("cancelWriting", move |socket: SocketRef, Data::<Value>(data)| {
         let app_state = app_state.clone();
-        handlers::handle_cancel_writing(socket, SocketIo::new(), data);
+        handle_cancel_writing(socket, SocketIo::new(), data);
     });
 
     // Keep ping for testing
@@ -83,7 +83,7 @@ struct AppState {
     db: Pool<Postgres>,
 }
 
-type UserSocketMap = Arc<RwLock<HashMap<String, SocketRef>>>;
+type UserSocketMap = handlers::UserSocketMap;
 
 #[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -117,8 +117,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     info!("Starting server");
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3333").await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    let listener = match tokio::net::TcpListener::bind("0.0.0.0:3333").await {
+        Ok(listener) => listener,
+        Err(e) => {
+            eprintln!("Failed to bind to port 3333: {}", e);
+            return Err(Box::new(std::io::Error::new(
+                std::io::ErrorKind::AddrInUse,
+                format!("Failed to bind to port 3333: {}", e),
+            )));
+        }
+    };
+
+    if let Err(e) = axum::serve(listener, app).await {
+        eprintln!("Server error: {}", e);
+        return Err(Box::new(e));
+    }
 
     Ok(())
 }

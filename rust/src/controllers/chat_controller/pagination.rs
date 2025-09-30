@@ -64,7 +64,7 @@ pub async fn get_chat(State(state): State<AppState>, Path(page): Path<i64>) -> i
                     }),
                 );
             }
-            let count = count.unwrap();
+            let count = count.unwrap_or(0);
             count
         }
         Err(err) => {

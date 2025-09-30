@@ -91,7 +91,10 @@ pub async fn login_by_email(
         return (StatusCode::BAD_REQUEST, Resp::error("User not found"));
     }
 
-    let user = user.unwrap();
+    let user = match user {
+        Some(user) => user,
+        None => return (StatusCode::BAD_REQUEST, Resp::error("User not found")),
+    };
 
     let password_valid = match &user.password {
         Some(hashed_password) => match PasswordHash::new(hashed_password) {

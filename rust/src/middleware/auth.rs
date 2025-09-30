@@ -16,7 +16,15 @@ pub async fn middleware_auth(
     }
 
     let token_bearer = token_bearer.unwrap();
-    let token_bearer_str = token_bearer.to_str().expect("failed to change to string");
+    let token_bearer_str = match token_bearer.to_str() {
+        Ok(s) => s,
+        Err(_) => {
+            return Err((
+                StatusCode::UNAUTHORIZED,
+                Resp::error("Invalid authorization header format"),
+            ));
+        }
+    };
     let token = match token_bearer_str.strip_prefix("Bearer ") {
         Some(token) => token.trim(),
         None => {
@@ -56,6 +64,9 @@ impl JwtExt for axum::extract::Request {
         self.extensions()
             .get::<i64>()
             .copied()
-            .unwrap_or(0) // Should be 0 for development, but should have proper error handling
+            .unwrap_or_else(|| {
+                tracing::warn!("User ID not found in extensions, using 0 as fallback");
+                0
+            })
     }
 }

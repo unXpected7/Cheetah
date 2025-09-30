@@ -18,8 +18,14 @@ pub async fn check_available(
     if email.is_none() && nickname.is_none() {
         return (StatusCode::BAD_REQUEST, Resp::error("body can't be empty"));
     }
-    let email = email.unwrap();
-    let nickname = nickname.unwrap();
+    let email = match email {
+        Some(email) => email,
+        None => return (StatusCode::BAD_REQUEST, Resp::error("Email is required")),
+    };
+    let nickname = match nickname {
+        Some(nickname) => nickname,
+        None => return (StatusCode::BAD_REQUEST, Resp::error("Nickname is required")),
+    };
 
     let result = get_user_by_email(email, nickname, state.db).await;
 

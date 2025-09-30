@@ -79,12 +79,24 @@ pub struct VerifyJwt {
 
 impl VerifyJwt {
     pub fn extract_user_id(&self) -> i64 {
-        self.user_id.unwrap_or(0)
+        self.user_id.unwrap_or_else(|| {
+            tracing::warn!("User ID is None, using 0 as fallback");
+            0
+        })
     }
 }
 
 pub fn verify_jwt(token: &str) -> VerifyJwt {
-    let secret = env::var("SECRET").expect("env secret not found");
+    let secret = match env::var("SECRET") {
+        Ok(secret) => secret,
+        Err(_) => {
+            return VerifyJwt {
+                result: false,
+                reason: "SECRET environment variable not set".to_string(),
+                user_id: None,
+            };
+        }
+    };
 
     let parts: Vec<&str> = token.split('.').collect();
     if parts.len() != 3 {
