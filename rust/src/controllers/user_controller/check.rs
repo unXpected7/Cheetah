@@ -1,7 +1,7 @@
-use axum::{Json, http::StatusCode, response::IntoResponse};
+use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
 use serde::Deserialize;
 
-use crate::{controllers::user_controller::get_user::get_user_by_email, libs::Resp};
+use crate::{AppState, controllers::user_controller::get_user::get_user_by_email, libs::Resp};
 
 #[derive(Deserialize)]
 pub struct CheckParams {
@@ -9,7 +9,10 @@ pub struct CheckParams {
     pub nickname: Option<String>,
 }
 
-pub async fn check_available(Json(params): Json<CheckParams>) -> impl IntoResponse {
+pub async fn check_available(
+    State(state): State<AppState>,
+    Json(params): Json<CheckParams>,
+) -> impl IntoResponse {
     let email = params.email;
     let nickname: Option<String> = params.nickname;
     if email.is_none() && nickname.is_none() {
@@ -18,7 +21,7 @@ pub async fn check_available(Json(params): Json<CheckParams>) -> impl IntoRespon
     let email = email.unwrap();
     let nickname = nickname.unwrap();
 
-    let result = get_user_by_email(email, nickname).await;
+    let result = get_user_by_email(email, nickname, state.db).await;
 
     if result.is_none() {
         return Resp::success("user not found", result);

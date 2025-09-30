@@ -1,13 +1,16 @@
-use axum::routing::get;
+use axum::{Router, routing::get};
 use serde_json::Value;
 use socketioxide::{
     SocketIo,
     extract::{AckSender, Data, SocketRef},
 };
+use sqlx::{Pool, Postgres};
 use tower::ServiceBuilder;
 use tower_http::cors::CorsLayer;
 use tracing::info;
 use tracing_subscriber::FmtSubscriber;
+
+use crate::db::conn::create_connection;
 
 mod controllers;
 mod db;
@@ -30,9 +33,18 @@ fn on_connect(socket: SocketRef, Data(data): Data<Value>) {
     });
 }
 
+#[derive(Clone)]
+struct AppState {
+    db: Pool<Postgres>,
+}
+
 #[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing::subscriber::set_global_default(FmtSubscriber::default())?;
+
+    let pool = create_connection().await;
+
+    let state = AppState { db: pool };
 
     let (layer, io) = SocketIo::new_layer();
 
@@ -45,7 +57,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app = axum::Router::new()
         .route("/", get(|| async { "Hello, World!" }))
         .merge(router::main())
-        .layer(layer);
+        .layer(layer)
+        .with_state(state);
 
     info!("Starting server");
 

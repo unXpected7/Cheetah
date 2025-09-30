@@ -1,14 +1,14 @@
-use crate::db::{conn::create_connection, model::User};
+use sqlx::{Pool, Postgres};
 
-pub async fn get_user_by_auth_id(user_id: i64) -> Option<User> {
-    let connection = create_connection().await;
+use crate::db::model::User;
+
+pub async fn get_user_by_auth_id(user_id: i64, db: Pool<Postgres>) -> Option<User> {
+    let connection = &db;
 
     let results = sqlx::query_as::<_, User>("SELECT * FROM users where id = $1")
         .bind(user_id)
-        .fetch_one(&connection)
+        .fetch_one(connection)
         .await;
-
-    connection.close().await;
 
     match results {
         Ok(user) => Some(user),
@@ -19,17 +19,19 @@ pub async fn get_user_by_auth_id(user_id: i64) -> Option<User> {
     }
 }
 
-pub async fn get_user_by_email(email: String, nickname: String) -> Option<User> {
-    let connection = create_connection().await;
+pub async fn get_user_by_email(
+    email: String,
+    nickname: String,
+    db: Pool<Postgres>,
+) -> Option<User> {
+    let connection = &db;
 
     let results =
         sqlx::query_as::<_, User>("SELECT * FROM users where email = $1 OR nickname = $2")
             .bind(email)
             .bind(nickname)
-            .fetch_one(&connection)
+            .fetch_one(connection)
             .await;
-
-    connection.close().await;
 
     match results {
         Ok(user) => Some(user),

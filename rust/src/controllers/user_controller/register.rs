@@ -1,4 +1,4 @@
-use crate::db::conn::create_connection;
+use crate::AppState;
 use crate::libs::Resp;
 use crate::libs::avatar::AvatarType;
 use crate::libs::avatar::generate_avatar;
@@ -7,6 +7,7 @@ use argon2::{
     password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
 };
 use axum::extract::Json;
+use axum::extract::State;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use serde::Deserialize;
@@ -19,8 +20,11 @@ pub struct UserRegistration {
     pub avatar: Option<String>,
 }
 
-pub async fn register_user(Json(params): Json<UserRegistration>) -> impl IntoResponse {
-    let connection = create_connection().await;
+pub async fn register_user(
+    State(state): State<AppState>,
+    Json(params): Json<UserRegistration>,
+) -> impl IntoResponse {
+    let connection = &state.db;
     let password = params.password.as_bytes();
     let salt = SaltString::generate(&mut OsRng);
     let argon2 = Argon2::default();
@@ -39,9 +43,8 @@ pub async fn register_user(Json(params): Json<UserRegistration>) -> impl IntoRes
             .bind(params.nickname)
             .bind(password_hash)
             .bind(avatar)
-            .execute(&connection)
+            .execute(connection)
             .await;
-    connection.close().await;
     match results {
         Ok(row) => Resp::success("User registered successfully", None::<()>),
         Err(e) => {

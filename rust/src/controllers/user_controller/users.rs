@@ -1,20 +1,21 @@
-use axum::{extract::Path, http::StatusCode, response::IntoResponse};
-
-use crate::{
-    controllers::user_controller::get_user::{get_user_by_auth_id, get_user_by_email},
-    db::{conn::create_connection, model::User},
-    libs::Resp,
+use axum::{
+    extract::{Path, State},
+    http::StatusCode,
+    response::IntoResponse,
 };
 
-pub async fn get_one_user(nickname: Path<String>) -> impl IntoResponse {
-    let connection = create_connection().await;
+use crate::{AppState, db::model::User, libs::Resp};
+
+pub async fn get_one_user(
+    State(state): State<AppState>,
+    nickname: Path<String>,
+) -> impl IntoResponse {
+    let connection = &state.db;
 
     let results = sqlx::query_as::<_, User>("SELECT * FROM users where nickname = $1")
         .bind(nickname.to_string())
-        .fetch_one(&connection)
+        .fetch_one(connection)
         .await;
-
-    connection.close().await;
 
     match results {
         Ok(user) => {

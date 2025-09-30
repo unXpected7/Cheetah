@@ -1,6 +1,7 @@
-use crate::db::{conn::create_connection, model::Chat};
+use crate::AppState;
+use crate::db::model::Chat;
 use crate::libs::Resp;
-use axum::extract::Path;
+use axum::extract::{Path, State};
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use serde::{Deserialize, Serialize};
@@ -43,14 +44,14 @@ impl PaginationMeta {
 }
 
 // Original handler with path parameter (improved)
-pub async fn get_chat(Path(page): Path<i64>) -> impl IntoResponse {
+pub async fn get_chat(State(state): State<AppState>, Path(page): Path<i64>) -> impl IntoResponse {
     let page = page.max(1); // Ensure minimum page is 1
     let limit: i64 = 100;
 
-    let connection = create_connection().await;
+    let connection = &state.db;
 
     let total = match sqlx::query_scalar!("SELECT COUNT(*) FROM chats")
-        .fetch_one(&connection)
+        .fetch_one(connection)
         .await
     {
         Ok(count) => {
@@ -97,10 +98,8 @@ pub async fn get_chat(Path(page): Path<i64>) -> impl IntoResponse {
     let results = sqlx::query_as::<_, Chat>(query)
         .bind(limit)
         .bind(offset)
-        .fetch_all(&connection)
+        .fetch_all(connection)
         .await;
-
-    connection.close().await;
 
     match results {
         Ok(rows) => {
