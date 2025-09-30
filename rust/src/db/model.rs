@@ -1,6 +1,6 @@
 use chrono::{DateTime, Utc};
 use serde::Serialize;
-use serde_json::Value;
+
 #[derive(Serialize, sqlx::FromRow)]
 pub struct User {
     pub id: i64,
@@ -15,7 +15,7 @@ pub struct User {
     #[serde(rename = "authId")]
     #[sqlx(rename = "authId")]
     pub auth_id: Option<String>,
-    pub updated_at: Option<DateTime<Utc>>, // Changed to match Timestamptz
+    pub updated_at: Option<DateTime<Utc>>,
     pub created_at: Option<DateTime<Utc>>,
 }
 
@@ -24,14 +24,14 @@ pub struct Chat {
     pub id: i64,
     pub message: Option<String>,
     pub attachment: Option<String>,
-    pub updated_at: Option<DateTime<Utc>>, // Changed to match Timestamptz
-    pub created_at: Option<DateTime<Utc>>, // Changed to match Timestamptz
+    pub updated_at: Option<DateTime<Utc>>,
+    pub created_at: Option<DateTime<Utc>>,
     #[serde(rename = "userId")]
     #[sqlx(rename = "userId")]
     pub user_id: Option<i64>,
     #[serde(rename = "replyId")]
     #[sqlx(rename = "replyId")]
     pub reply_id: Option<i64>,
-    pub user: Option<Value>,
-    pub reply: Option<Value>,
+    pub user: Option<User>,
+    pub reply: Option<Chat>,
 }

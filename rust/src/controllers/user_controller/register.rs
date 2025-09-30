@@ -32,10 +32,18 @@ pub async fn register_user(
         params.nickname.clone(),
         AvatarType::Identicon,
     ));
-    let password_hash = argon2
+    let password_hash = match argon2
         .hash_password(password, &salt)
-        .expect("Failed to hash password")
-        .to_string();
+    {
+        Ok(hash) => hash.to_string(),
+        Err(e) => {
+            eprintln!("Failed to hash password: {}", e);
+            return (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                Resp::error("Failed to hash password"),
+            );
+        }
+    };
 
     let results =
         sqlx::query("INSERT INTO users (email, nickname, password, avatar) VALUES ($1,$2,$3,$4)")

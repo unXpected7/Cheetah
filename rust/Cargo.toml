@@ -24,3 +24,4 @@ base64 = "0.22.1"
 hmac = "0.12.1"
 sha2 = "0.10.9"
 sqlx = { version = "0.8.6", features = ["postgres","runtime-tokio-rustls","chrono","uuid"] }
+thiserror = "1.0"
