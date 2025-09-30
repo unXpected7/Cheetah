@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Mail, Lock } from "lucide-react";
+import { mockAPI } from "../../services/mockAPI";
 
 const signInSchema = yup.object({
   email: yup.string()
@@ -23,19 +24,28 @@ const SignIn = ({ onLoginSuccess }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [loginMessage, setLoginMessage] = React.useState('');
 
-  const handleSignIn = (data) => {
+  const handleSignIn = async (data) => {
     console.log('Sign in data:', data);
     setIsLoading(true);
     setLoginMessage('');
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await mockAPI.login(data.email, data.password);
+
+      if (response.success) {
+        setLoginMessage('Login successful! Redirecting...');
+        setTimeout(() => {
+          onLoginSuccess();
+        }, 1000);
+      } else {
+        setLoginMessage('Invalid email or password');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setLoginMessage('Login failed. Please try again.');
+    } finally {
       setIsLoading(false);
-      setLoginMessage('Login successful! Redirecting...');
-      setTimeout(() => {
-        onLoginSuccess();
-      }, 1000);
-    }, 1500);
+    }
   };
 
   return (

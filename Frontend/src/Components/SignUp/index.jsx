@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Mail, Lock, Shield } from "lucide-react";
+import { mockAPI } from "../../services/mockAPI";
 
 const signUpSchema = yup.object({
   email: yup.string()
@@ -22,9 +23,20 @@ const SignUp = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(signUpSchema) });
 
-  const registerUser = (data) => {
+  const registerUser = async (data) => {
     console.log('Sign up data:', data);
-    alert('Sign up functionality would be implemented here');
+    try {
+      const response = await mockAPI.signup(data.email, data.password, data.name || data.email.split('@')[0]);
+
+      if (response.success) {
+        alert('Sign up successful! You can now sign in with your credentials.');
+      } else {
+        alert('Email already exists or registration failed.');
+      }
+    } catch (error) {
+      console.error('Sign up error:', error);
+      alert('Registration failed. Please try again.');
+    }
   };
 
   return (
