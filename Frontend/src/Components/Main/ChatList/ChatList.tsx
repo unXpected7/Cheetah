@@ -1,105 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search, User, Phone, Camera, Plus, MoreHorizontal } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ChatListProps, ChatInfo, ChatType } from '@/types/chat';
+import mockChatApi from '../../services/mockChatApi';
 
-const ChatList: React.FC<ChatListProps> = ({ onSelectChat }) => {
+interface EnhancedChatListProps extends ChatListProps {
+  chats?: ChatInfo[];
+  onChatUpdate?: (chats: ChatInfo[]) => void;
+}
+
+const ChatList: React.FC<EnhancedChatListProps> = ({
+  onSelectChat,
+  chats: propChats,
+  onChatUpdate
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [chatData, setChatData] = useState<ChatInfo[]>(propChats || []);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const chatData: ChatInfo[] = [
-    {
-      id: '1',
-      name: 'John Doe',
-      lastMessage: 'Hey, how are you doing?',
-      time: '2:30 PM',
-      unread: 2,
-      isOnline: true,
-      avatar: 'JD',
-      type: 'personal' as ChatType,
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      lastMessage: 'See you tomorrow!',
-      time: '1:45 PM',
-      unread: 0,
-      isOnline: true,
-      avatar: 'JS',
-      type: 'personal' as ChatType,
-    },
-    {
-      id: '3',
-      name: 'Work Group',
-      lastMessage: 'Mike: Meeting at 3 PM',
-      time: '12:30 PM',
-      unread: 5,
-      isOnline: false,
-      avatar: 'WG',
-      type: 'group' as ChatType,
-      members: 8,
-    },
-    {
-      id: '4',
-      name: 'Family',
-      lastMessage: 'Mom: Dinner at 7?',
-      time: '11:20 AM',
-      unread: 1,
-      isOnline: false,
-      avatar: 'F',
-      type: 'group' as ChatType,
-      members: 6,
-    },
-    {
-      id: '5',
-      name: 'Alex Johnson',
-      lastMessage: 'Thanks for your help!',
-      time: 'Yesterday',
-      unread: 0,
-      isOnline: false,
-      avatar: 'AJ',
-      type: 'personal' as ChatType,
-    },
-    {
-      id: '6',
-      name: 'Project Channel',
-      lastMessage: 'Sarah: New feature deployed',
-      time: 'Yesterday',
-      unread: 0,
-      isOnline: false,
-      avatar: 'PC',
-      type: 'channel' as ChatType,
-      members: 12,
-    },
-    {
-      id: '7',
-      name: 'Tech Team',
-      lastMessage: 'David: Bug fix completed',
-      time: '2 days ago',
-      unread: 0,
-      isOnline: true,
-      avatar: 'TT',
-      type: 'channel' as ChatType,
-      members: 15,
-    },
-    {
-      id: '8',
-      name: 'Emily Wilson',
-      lastMessage: 'Call me when you\'re free',
-      time: '2 days ago',
-      unread: 0,
-      isOnline: false,
-      avatar: 'EW',
-      type: 'personal' as ChatType,
-    },
-  ];
+  // Load chat data
+  const loadChatData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-  const filteredChats = chatData.filter(chat =>
-    chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      if (searchQuery.trim()) {
+        const filteredChats = await mockChatApi.searchChats(searchQuery);
+        setChatData(filteredChats);
+        onChatUpdate?.(filteredChats);
+      } else {
+        const allChats = await mockChatApi.getChats();
+        setChatData(allChats);
+        onChatUpdate?.(allChats);
+      }
+    } catch (err) {
+      setError('Failed to load chats');
+      console.error('Error loading chats:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [searchQuery, onChatUpdate]);
 
-  const totalUnread = filteredChats.filter(chat => chat.unread > 0).length;
+  // Initial load
+  useEffect(() => {
+    if (!propChats) {
+      loadChatData();
+    } else {
+      setChatData(propChats);
+      setLoading(false);
+    }
+  }, [propChats, loadChatData]);
+
+  // Real-time updates
+  useEffect(() => {
+    const unsubscribe = mockChatApi.subscribeToUpdates((updatedChats) => {
+      if (!searchQuery.trim()) {
+        setChatData(updatedChats);
+        onChatUpdate?.(updatedChats);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [searchQuery, onChatUpdate]);
+
+  // Handle search
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      loadChatData();
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery, loadChatData]);
+
+  // Use filtered data from API, no need for client-side filtering
+  const totalUnread = chatData.filter(chat => chat.unread > 0).length;
 
   const renderChatItem = (chat: ChatInfo) => (
     <div
@@ -147,6 +123,28 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat }) => {
     </div>
   );
 
+  const renderLoadingState = () => (
+    <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+      <h3 className="text-lg font-semibold text-foreground mb-2">Loading chats...</h3>
+      <p className="text-sm text-muted-foreground">Please wait while we fetch your conversations</p>
+    </div>
+  );
+
+  const renderErrorState = () => (
+    <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+      <div className="text-6xl mb-4 text-muted-foreground">❌</div>
+      <h3 className="text-lg font-semibold text-foreground mb-2">Error loading chats</h3>
+      <p className="text-sm text-muted-foreground mb-4">{error}</p>
+      <button
+        onClick={loadChatData}
+        className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm hover:bg-primary/90 transition-colors"
+      >
+        Try Again
+      </button>
+    </div>
+  );
+
   return (
     <div className="flex flex-col h-full bg-card">
       {/* Search Bar */}
@@ -186,9 +184,17 @@ const ChatList: React.FC<ChatListProps> = ({ onSelectChat }) => {
         </TabsList>
 
         <TabsContent value="chats" className="flex-1 overflow-auto">
-          {filteredChats.length > 0 ? (
+          {loading ? (
+            <div className="p-4">
+              {renderLoadingState()}
+            </div>
+          ) : error ? (
+            <div className="p-4">
+              {renderErrorState()}
+            </div>
+          ) : chatData.length > 0 ? (
             <div className="divide-y">
-              {filteredChats.map(renderChatItem)}
+              {chatData.map(renderChatItem)}
             </div>
           ) : (
             <div className="p-4">

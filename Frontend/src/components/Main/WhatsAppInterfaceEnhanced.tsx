@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, Phone, Music, MoreHorizontal, Search, Phone as PhoneIcon } from 'lucide-react';
+import { ChevronLeft, Phone, MoreHorizontal, Search, Phone as PhoneIcon } from 'lucide-react';
 import ChatList from './ChatList/ChatList';
 import EnhancedChat from './EnhancedChat';
 import Top from './TopBar';
 import { WhatsAppInterfaceProps, ChatInfo, AuthUser } from '@/types/chat';
-import { mockChatApi } from '../services/mockChatApi';
-import { useRealtimeUpdates } from '../RealtimeHooks';
+import { mockChatApi } from '@/services/mockChatApi';
+import { useRealtimeUpdates } from '@/components/RealtimeHooks';
 
-const WhatsAppInterface: React.FC<WhatsAppInterfaceProps> = ({ user }) => {
+const WhatsAppInterfaceEnhanced: React.FC<WhatsAppInterfaceProps> = ({ user }) => {
   const [selectedChat, setSelectedChat] = useState<ChatInfo | null>(null);
   const [mobileView, setMobileView] = useState<'list' | 'chat'>('list');
   const [chats, setChats] = useState<ChatInfo[]>([]);
@@ -144,4 +144,4 @@ const WhatsAppInterface: React.FC<WhatsAppInterfaceProps> = ({ user }) => {
   );
 };
 
-export default WhatsAppInterface;
+export default WhatsAppInterfaceEnhanced;

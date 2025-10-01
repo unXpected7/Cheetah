@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
   frontend:
-    build: .
+    build:
+      context: .
+      args:
+        NODE_ENV: development
     ports:
       - "4000:3000"
     environment:
@@ -12,4 +15,4 @@ services:
       - /app/node_modules
     stdin_open: true
     tty: true
-    command: sh -c "npm install && npm start"
+    command: sh -c "npm install --legacy-peer-deps && npm start"
